@@ -1,0 +1,130 @@
+<html>
+
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Processing Demo</title>
+      <script type="text/javascript" src="js/processing.js"></script>
+  </head>
+  
+  <body>
+    <h1>The Ball Catcher</h1>
+    <p>get the ball (GOODLUCK)</p>
+    
+    <script type="text/processing">
+    
+     //DECLARE VARIABLES
+int gameState;
+float circleX;
+float xspeed =5;
+int count;
+int timer;
+Timer countDownTimer;
+int timeLeft;
+float yspeed=5;
+float circleY;
+//SETUP
+void setup(){
+  size(1920,1080);
+  surface.setResizable(true);
+  gameState= 0;
+ countDownTimer = new Timer(1000);
+ timeLeft= 2500;
+  
+}
+
+//MAIN
+void draw(){
+  background(50);  //black background
+  if(gameState==0){
+    startScreen();
+  }
+ 
+  else if (gameState==1){
+    //countDown logic
+    if (countDownTimer.complete() == true) {
+      if (timeLeft > 1 ) {
+       
+        timeLeft--;
+     
+    }
+    }
+    
+    //BEGIN GAME  --TODO
+    
+    //show countdown
+    String s = "Time Left:" +timeLeft;
+    textAlign(LEFT);
+    textSize(50);
+    fill(255,0,0);
+    text(s,20,100);
+    ellipse(circleX,circleY,100,100);
+    
+    circleX = circleX +xspeed;
+    
+    if (circleX > width) {
+      xspeed  = -10;
+    }
+    
+    if (circleX < 0) {
+     xspeed = 5;
+    }
+     circleY = circleY + yspeed;
+     if (circleY > height) {
+       yspeed = -15;
+       
+     }
+     if (circleY < 0) {
+       yspeed=15;
+     }
+  }
+}
+
+void startScreen(){
+    textSize(44);
+    fill(255,0,0);  //red
+    text("BOUNCING THE BALL", 40, 100);
+    fill(100,200,200); 
+    text("'CLICK THE BALL' ", 60, 200);
+    if(mouseX > 95 && mouseX < 395 && mouseY > 265 && mouseY < 310){
+      fill(0,255,0); //Green
+      if(mousePressed){
+        gameState=1;
+      }
+    }
+    else{
+      fill(255,0,0);  //red
+    }
+    rect(95, 310, 300, -55, 15);
+    fill(255);
+    text("CLICK   HERE!", 100, 300);
+}
+
+class Timer {
+  int startTime;
+  int interval;
+  
+  Timer(int timeInterval) {
+    interval = timeInterval;
+  }
+  
+  void start() {
+    startTime = millis();
+  }
+  boolean complete() {
+    int elapsedTime = millis() - startTime;
+    if (elapsedTime > interval) {
+      return true;
+    }else {
+      return false;
+      
+      
+    }
+  }
+}
+    
+    </script>
+    <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    
+  </body>
+  
+</html>
