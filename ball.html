@@ -11,8 +11,6 @@
     <p>get the ball (GOODLUCK)</p>
     
     <script type="text/processing">
-    
-     //DECLARE VARIABLES
 int gameState;
 float circleX;
 float xspeed =5;
@@ -24,8 +22,8 @@ float yspeed=5;
 float circleY;
 //SETUP
 void setup(){
-  size(1920,1080);
-  surface.setResizable(true);
+  size(600,600);
+  //surface.setResizable(true);
   gameState= 0;
  countDownTimer = new Timer(1000);
  timeLeft= 2500;
