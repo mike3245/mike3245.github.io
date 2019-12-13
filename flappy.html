@@ -1,0 +1,173 @@
+<html>
+
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Processing Demo</title>
+      <script type="text/javascript" src="js/processing.js"></script>
+  </head>
+  
+  <body>
+    <h1>Flappy Pikachu</h1>
+    <p>mouse1 to jump</p>
+    
+    <script type="text/processing">
+    
+     
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+
+PImage bg, pika, topP, botP;
+int bgx, bgy, lx, ly, g, Vly;
+int[] pipeX, pipeY;
+int gameState, score, highscore;
+
+void setup(){
+  
+  
+  size(768,620);
+  bg = loadImage("./img/bg.png");
+  pika = loadImage("./img/pika.png");
+  botP = loadImage("./img/topP.png");
+  topP = loadImage("./img/botP.png");
+  lx = 100;
+  ly = 50;
+  g = 1;
+  pipeX = new int[5];
+  pipeY = new int[pipeX.length];
+  
+  for(int i = 0; i < pipeX.length; i++){
+    pipeX[i] = width + 200*i;
+    pipeY[i] = (int)random(-350, 0);
+  }
+  gameState = -1;
+}
+
+
+void draw(){
+  if(gameState == -1){
+    startScreen();
+  }
+  else if(gameState==0){
+    setBg();
+    setPipes();
+    thepika();
+    thescore();
+  }  
+  else if(gameState==1){
+    endScreen();
+    fill(1);
+    text("Don't quit", 20, 100);
+    text("try again",355,100);
+    }
+}
+
+void startScreen(){
+  
+  image(bg, 0, 0);
+  textSize(40);
+  fill(255,0,0);
+  text("ITS TIME TO PLAY FLAPPY PIKACHU", 40, 100);
+  fill(255,0,0);
+  text("CLICK ON THE SCREEN", 40, 200);
+  
+  if(mousePressed){
+    ly = height/2;
+    gameState = 0;
+    
+  }
+}
+
+void setBg(){
+image(bg, bgx, bgy);
+  image(bg, bgx + bg.width, bgy);
+  bgx = bgx - 2;
+  if(bgx < -bg.width){
+  bgx = 0; //reset it once
+  }
+}
+
+void setPipes(){
+for(int i = 0; i < pipeX.length; i++)
+{
+  image(topP, pipeX[i], pipeY[i]);
+  image(botP, pipeX[i], pipeY[i] + 680);
+  pipeX[i]-= 2.5;
+  
+  if(pipeX[i] < -200)
+  {
+    pipeX[i] = width;
+  }
+  
+  if(lx > (pipeX[i] - 45) && lx < pipeX[i] + 66)
+  { 
+    if(!(ly > pipeY[i] + 450 && ly < pipeY[i] + (450 + 230 - 45)))
+    {
+    gameState=1;
+    }
+    else if(lx==pipeX[i] || lx==pipeX[i] + 1){
+    score++;
+    }
+  }
+  }
+}
+
+void thepika(){
+  image(pika, lx, ly);
+  ly = ly + Vly;
+  Vly = Vly + g;
+  
+  if(ly > height || ly < 0){
+    
+    
+    gameState=1;
+  }
+  
+  if(score > highscore){
+    highscore = highscore + 1;
+  }
+}
+
+void thescore(){
+  textSize(64);
+  fill(0,0,255);
+  text("Score:" + score, width - 450, 50);
+  
+  fill(0,0,255);
+  text("Highscore:" + highscore, 300, 600);
+}
+
+void endScreen(){
+  
+  
+  fill(0,255,0);
+  textSize(23);
+  text("Dont quit CLICK HERE ", 266, 308);
+  if(mouseX < 768 && mouseX > 0 && mouseY < 620 && mouseY > 768){
+  score=0;
+  }
+}
+
+void mousePressed(){
+  Vly = -15;
+}
+void keypressed(){
+  Vly= -15;
+}
+void mouseClicked(){
+  if(gameState==1 && mouseX < 534 && mouseX > 266 && mouseY < 372 && mouseY > 248 ){
+    setup();
+    score=0;
+  }
+}
+    
+    </script>
+    <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    
+  </body>
+  
+</html>
